@@ -21,6 +21,8 @@ public class MombinBootstrap implements Runnable {
 
     @CommandLine.Option(names = "--port")
     private Integer port;
+    @CommandLine.Option(names = "--workers")
+    private Integer workers;
 
     public static void start(String... args) {
         CommandLine.run(new MombinBootstrap(), args);
@@ -28,12 +30,14 @@ public class MombinBootstrap implements Runnable {
 
     @Override
     public void run() {
+        EventLoopGroup workerGroup;
         if (port == null) {
             port = PORT;
         }
-        log.info("Port is {}", port);
+        workerGroup = allocateWorkers();
+        log.info("Server starts on {} port", port);
         EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
@@ -55,5 +59,9 @@ public class MombinBootstrap implements Runnable {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }
+    }
+
+    private EventLoopGroup allocateWorkers() {
+        return workers == null ? new NioEventLoopGroup() : new NioEventLoopGroup(workers);
     }
 }
