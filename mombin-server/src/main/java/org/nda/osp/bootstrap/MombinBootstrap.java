@@ -8,16 +8,15 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
+@Slf4j
 @CommandLine.Command
 public class MombinBootstrap implements Runnable {
 
-    private static final int PORT = 9778;
+    private static final int DEFAULT_PORT = 9778;
 
-    private static Logger log = LoggerFactory.getLogger(MombinBootstrap.class);
 
     @CommandLine.Option(names = "--port")
     private Integer port;
@@ -31,9 +30,7 @@ public class MombinBootstrap implements Runnable {
     @Override
     public void run() {
         EventLoopGroup workerGroup;
-        if (port == null) {
-            port = PORT;
-        }
+        allocatePort();
         workerGroup = allocateWorkers();
         log.info("Server starts on {} port", port);
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -58,6 +55,12 @@ public class MombinBootstrap implements Runnable {
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
+        }
+    }
+
+    private void allocatePort() {
+        if (port == null) {
+            port = DEFAULT_PORT;
         }
     }
 
