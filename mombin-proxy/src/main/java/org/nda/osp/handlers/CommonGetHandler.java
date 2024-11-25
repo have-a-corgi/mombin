@@ -1,5 +1,6 @@
 package org.nda.osp.handlers;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -13,7 +14,7 @@ public class CommonGetHandler implements HandlerFunction<ServerResponse> {
 
     @Override
     public Mono<ServerResponse> handle(ServerRequest request) {
-        return ok().bodyValue("""
+        return ok().contentType(MediaType.APPLICATION_JSON).bodyValue("""
                 {"name":"test"}""");
     }
 }

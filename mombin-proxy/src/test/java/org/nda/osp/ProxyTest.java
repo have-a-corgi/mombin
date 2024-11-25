@@ -14,14 +14,14 @@ public class ProxyTest {
 
     @Autowired
     @Qualifier("commonGetRouter")
-    private RouterFunction<ServerResponse> commonGetRouter;
+    private RouterFunction<ServerResponse> router;
 
     @Test
     public void commonGetHandlerTest() {
         String expectedResponse = """
                 {"name":"test"}""";
         WebTestClient client = WebTestClient
-                .bindToRouterFunction(commonGetRouter)
+                .bindToRouterFunction(router)
                 .build();
         client.get().uri("/get/route")
                 .exchange().expectStatus().isOk()
