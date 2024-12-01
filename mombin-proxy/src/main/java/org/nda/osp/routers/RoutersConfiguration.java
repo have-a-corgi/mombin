@@ -14,7 +14,7 @@ public class RoutersConfiguration {
 
     @Bean("commonGetRouter")
     public RouterFunction<ServerResponse> commonGetRouter(CommonGetHandler commonGetHandler) {
-        return RouterFunctions.route(GET("/get/route"), commonGetHandler);
+        return RouterFunctions.route(GET("/**"), commonGetHandler);
     }
 
 }

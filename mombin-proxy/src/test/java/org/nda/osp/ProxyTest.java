@@ -19,7 +19,7 @@ public class ProxyTest {
     @Test
     public void commonGetHandlerTest() {
         String expectedResponse = """
-                {"name":"test"}""";
+                {"name":"/get/route"}""";
         WebTestClient client = WebTestClient
                 .bindToRouterFunction(router)
                 .build();
