@@ -22,7 +22,7 @@ public class CommonGetHandler implements HandlerFunction<ServerResponse> {
 
     @Override
     public Mono<ServerResponse> handle(ServerRequest request) {
-        Mono<String> response = marshaller.get();
-        return ServerResponse.ok().body(response, String.class);
+        Mono<byte[]> response = marshaller.get();
+        return ServerResponse.ok().body(response, byte[].class);
     }
 }

@@ -11,12 +11,12 @@ public class Marshaller {
 
     private final WebClient webClient;
 
-    public Mono<String> get() {
+    public Mono<byte[]> get() {
         return webClient
                 .get()
                 .uri("https://www.gazeta.ru")
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(byte[].class);
     }
 
 
