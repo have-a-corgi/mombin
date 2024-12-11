@@ -1,5 +1,7 @@
 package org.nda.osp.dto;
 
-public record ResponseDto (String name) {
+import reactor.core.publisher.Mono;
+
+public record ResponseDto (Mono<byte[]> content) {
 
 }
