@@ -1,6 +1,7 @@
 package org.nda.osp.handlers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.nda.osp.client.Marshaller;
 
@@ -10,7 +11,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.CompletableFuture;
+import java.net.http.HttpResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,10 +20,11 @@ public class CommonGetHandler implements HandlerFunction<ServerResponse> {
 
     private final Marshaller marshaller;
 
+    @SneakyThrows
     @Override
     public Mono<ServerResponse> handle(ServerRequest request) {
-        CompletableFuture<byte[]> future = CompletableFuture.supplyAsync(marshaller::callBack);
-        return ServerResponse.ok().body(Mono.fromFuture(future), byte[].class);
+        HttpResponse<byte[]> future = marshaller.callBack();
+        return ServerResponse.ok().bodyValue(future.body());
     }
 
 }

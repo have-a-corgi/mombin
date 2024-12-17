@@ -4,17 +4,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 @RequiredArgsConstructor
 @Service
 public class Marshaller {
 
     private final WebClient webClient;
 
-    public byte[] callBack() {
-        return webClient
-                .get()
-                .uri("https://www.gazeta.ru")
-                .exchangeToMono(cr ->
-                        cr.bodyToMono(byte[].class)).block();
+    public HttpResponse<byte[]> callBack() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(20))
+                .build();
+        HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create("https://edition.cnn.com/"))
+                .GET().build();
+        return client.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
     }
 }
