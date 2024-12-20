@@ -10,8 +10,7 @@ import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
-import java.net.http.HttpResponse;
+import reactor.core.scheduler.Schedulers;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,8 +22,11 @@ public class CommonGetHandler implements HandlerFunction<ServerResponse> {
     @SneakyThrows
     @Override
     public Mono<ServerResponse> handle(ServerRequest request) {
-        HttpResponse<byte[]> future = marshaller.callBack();
-        return ServerResponse.ok().bodyValue(future.body());
+        return Mono.just(marshaller.callBack()).publishOn(Schedulers.boundedElastic())
+                .map(httpResponse -> {
+                    System.out.println("THREAD Y: "+Thread.currentThread().getName());
+                    return ServerResponse.ok().bodyValue(httpResponse.body()).block();
+                });
     }
 
 }

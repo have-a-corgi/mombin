@@ -21,8 +21,9 @@ public class Marshaller {
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(20))
                 .build();
-        HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create("https://edition.cnn.com/"))
+        HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create("http://localhost:8091/imitation"))
                 .GET().build();
+        System.out.println("THREAD X: "+Thread.currentThread().getName());
         return client.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
     }
 }

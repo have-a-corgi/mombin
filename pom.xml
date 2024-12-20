@@ -16,6 +16,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>mombin-proxy</module>
+        <module>mombin-backend</module>
     </modules>
 
     <properties>
