@@ -17,6 +17,7 @@
     <modules>
         <module>mombin-proxy</module>
         <module>mombin-backend</module>
+        <module>mombin-pages</module>
     </modules>
 
     <properties>

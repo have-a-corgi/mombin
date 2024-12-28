@@ -1,8 +1,10 @@
 package org.nda.osp.client;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.server.ServerRequest;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,13 +19,13 @@ public class Marshaller {
 
     private final WebClient webClient;
 
-    public HttpResponse<byte[]> callBack() throws IOException, InterruptedException {
+    @SneakyThrows
+    public HttpResponse<byte[]> callBack(ServerRequest serverRequest) {
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(20))
                 .build();
         HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create("http://localhost:8091/imitation"))
                 .GET().build();
-        System.out.println("THREAD X: "+Thread.currentThread().getName());
         return client.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
     }
 }

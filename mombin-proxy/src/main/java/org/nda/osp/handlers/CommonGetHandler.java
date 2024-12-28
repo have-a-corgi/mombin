@@ -22,9 +22,9 @@ public class CommonGetHandler implements HandlerFunction<ServerResponse> {
     @SneakyThrows
     @Override
     public Mono<ServerResponse> handle(ServerRequest request) {
-        return Mono.just(marshaller.callBack()).publishOn(Schedulers.boundedElastic())
+        return Mono.just(request).publishOn(Schedulers.boundedElastic())
+                .map(marshaller::callBack)
                 .map(httpResponse -> {
-                    System.out.println("THREAD Y: "+Thread.currentThread().getName());
                     return ServerResponse.ok().bodyValue(httpResponse.body()).block();
                 });
     }
